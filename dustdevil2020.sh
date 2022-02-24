@@ -1,6 +1,5 @@
 #!/bin/bash
 
-
 sol=$1
 seqid=NCAM00525
 
@@ -25,13 +24,6 @@ cd ${soldir}/NCAM
 
 m20_fetch_raw -c NAVCAM_LEFT -s $sol -S ${seqid}
 
-if [ ! -d pngs ]; then
-    mkdir pngs
-else
-    rm pngs/*
-fi
+m20_ecam_calibrate -i *J0?.png -v
 
-/usr/bin/convert *${seqid}*J0?.png -verbose  -define png:bit-depth=16 "pngs/image_%04d.png"
-
-python /data/MSL/process_dd_movie.py -i pngs/ima*png -o DustDevil_${sol}_${seqid}_rjcal.gif -b 0 -w 5.0 -g 2.5 -a 10 -m 15 -M 255 -v -e 20 -n -B 21 -N -d 5 -D .45
-
+diffgif -i *${seqid}*-rjcal.png -o DiffGif_${sol}.gif -v -b 0 -w 3.0 -g 1.0 -B 1.5 -d 20
